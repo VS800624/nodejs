@@ -1,0 +1,302 @@
+This is the file reading 
+
+*How JavaScript works? Ans-Everything in JavaScript happens inside an "execution context".
+
+Execution context has two component 1)memory component[variable environment] -This is the place where all variables and functions are stored as key value pairs. eg-{key: value || n:2;}
+
+2)code component[Thread of execution] -This is the place where code is executed one line at a time(i.e line by line).
+
+Note- *JavaScript is a synchronous single-threaded language
+
+-Single threaded means JavaScript can execute once command at a time. -Synchronous single-threaded that means JavaScript can execute one command at a time in a specific order.
+
+Q) How JS code is executed?
+
+Whenever any JavaScript code is executed an execution context is created and it is the Global Execution Context.
+
+An Execution Context is basically a box which has two components called Memory Component(Variable Environment) and Code Component(Thread Of Execution).
+
+The Execution context is created in two phases a. Memory Creation Phase : In this Phase, Memory is allocated to all the variables and functions which are present in the global scope. Special keyword Undefined in case of variables and literally the whole function in case of functions. b. Code Execution Phase : In this Phase, code is executed line by line.
+
+Whenever there is a function invocation an all new execution context is created and same process is followed again.
+
+If there is any function parameter then it is also allocated memory while creating the execution context of the function.
+
+Whenever return keyword is encountered , it means the task of function is over and it returns back the control of the program back to the place where it was invoked. and with this this execution context is deleted from stack.
+
+Call Stack is basically a stack which maintains the order of execution of execution context. Whenever a code is executed the Global Execution Context is pushed into the stack first and later on as per the function invocation the execution context is pushed into the stack. When the function code is done executing the execution context is popped out and last the Global Execution Context is also deleted.
+
+Q) What is hosting in JS?
+
+After some research what I understood is -> When a JavaScript program runs, a global execution context is created. This context consists of two phases: a) Memory Creation Phase : .Variable declarations are scanned and allocated memory, initialized with the value 'undefined'. .Function declarations are scanned and stored in memory with their entire code. b) Code Execution Phase: The code is executed line by line.
+
+Hoisting is not about physically moving code to the top, but rather about how JavaScript allocates memory for variables and functions during the memory creation phase of the execution context. This mechanism allows for certain behaviors like using functions before they appear in the code, but it's crucial to understand that variables are initialized as 'undefined' until they're assigned a value during code execution. You can call a function before its declaration in the code because the entire function is available in memory from the start. Trying to access a variable before its declaration will result in 'undefined'. Function expressions and arrow functions, being treated as variables, hence cannot be called before their declaration in the code. Variable and function declarations are processed before any code is executed. However, only the declarations are processed, not the initializations. This gives the impression that declarations are "moved to the top" of their scope, but it's more accurate to say they're processed early in the execution context's creation.
+
+Points to be note :
+In JS, before the code is executed, the variables get initialized to undefined.
+Arrow functions act as variables and get "undefined" during the memory creation phase while functions actually get run.
+Hoisting: Mechanism in JS where the variable declarations are moved to the top of the scope before execution. Therefore it is possible to call a function before initializing it.
+Whenever a JS program is run, a global execution block is created, which comprises of 2: Memory creation and Code execution.
+Variable declarations are scanned and are made undefined
+Function declarations are scanned and are made available
+Q) How function works in JS ?
+
+We learnt how functions work in JS.
+At first a global execution context is created, which consists of Memory and code and has 2 phases: Memory allocation phase and code execution phase.
+In the first phase, the variables are assigned "undefined" while functions have their own code.
+Whenever there is a function declaration in the code, a separate local execution context gets created having its own phases and is pushed into the call stack.
+Once the function ends, the EC (Execution Context) is removed from the call stack.
+When the program ends, even the global EC is pulled out of the call stack.
+Q) Scope Chain ?
+
+lexical environment is the local memory + reference to the lexical environment of parent.
+
+Scope of a variable is directly dependent on the lexical environment.
+Whenever an execution context is created, a lexical environment is created. Lexical environment is the local memory along with the lexical environment of its parent. Lexical as a term means in hierarchy or in sequence.
+Having the reference of parent's lexical environment means, the child or the local function can access all the variables and functions defined in the memory space of its lexical parent.
+The JS engine first searches for a variable in the current local memory space, if its not found here it searches for the variable in the lexical environment of its parent, and if its still not found, then it searches that variable in the subsequent lexical environments, and the sequence goes on until the variable is found in some lexical environment or the lexical environment becomes NULL.
+The mechanism of searching variables in the subsequent lexical environments is known as Scope Chain. If a variable is not found anywhere, then we say that the variable is not present in the scope chain.
+Q) Temporal Dead Zone ?
+
+let and const are hoisted but its memory is allocated at other place(script or blocked scoped memory) than window (global execution context) which cannot be accessed before initialization.
+Temporal Dead Zone exists until variable is declared and assigned a value.
+window.variable OR this.variable will not give value of variable defined using let or const.
+We cannot redeclare the same variable with let/const(even with using var the second time).
+const variable declaration and initialization must be done on the same line.
+There are three types of error: [1] referenceError: while trying to access variable which is not there in global memory {or variable does not have memory allocation} [2] typeError {given when we change type that is not supposed to be changed} [3] syntaxError {when proper syntax(way of writing a statement) is not used}.
+Use const wherever possible followed by let, Use var as little as possible(only if you have to). It helps avoid error.
+Initializing variables at the top is good idea, helps shrinks TDZ to zero.
+Q) Block Scope amd Shadowing?
+
+Block :- It is used to combine multiple statement into one statement so that we can use it at those places where javascript expects to have single statement. Scope :- scope of a variable or a function is the place where these are accessible. Block scope :- The variables and function present within the scope of a block section. And block follows the lexical scope chain pattern while accessing the variable. Shadowing :- Providing same name to the variable as of those variable which are present in outer scope.
+
+Important points:-
+Code inside curly bracket is called block.
+Multiple statements are grouped inside a block so it can be written where JS expects single statements like in if, else, loop, function etc.
+Block values are stored inside separate memory than global. They are stored in block. (the reason let and const are called block scope)
+Shadowing of variables using var, let and const.
+The shadow should not cross the scope of original otherwise it will give error.
+shadowing let with var is illegal shadowing and gives error.
+var value is stored in nearest outer function or global scope and hence can be accessed outside block as well whereas same is not the case with let and const.
+Closure:
+Function bundled with its lexical environment is known as a closure. Whenever function is returned, even if its vanished in execution context but still it remembers the reference it was pointing to. Its not just that function alone it returns but the entire closure.
+
+In other words Closure is a combination of a function and its lexical scope bundled together forms a closure.
+
+Important things about closure:-
+An inner function can be directly called using two parenthesis ()().
+Even parameters can be passed this way (Remember that the function needs to be returned to do this)
+Closures can also be used for data hiding and encapsulation. So other code cannot access this value.
+Unused variables are automatically deleted in High Level Programming language by garbage collector. Closures allocate a lot of memory which cannot be deleted so this acts as a disadvantage.
+Some browsers now have smart garbage collectors that automatically deletes variables that are not used outside closures.
+Uses of Closures:
+
+It help us in data hiding and encapsulation.
+Modules Design Pattern
+Curring
+Functions like once
+memozize
+maintaining sate in async world
+setTimeouts
+Iterators
+and many more...
+Function statement / Function Declaration : the function is normally defined and can be used later on Function expression : the function is first created and assigned to a variable so that it can be called by its variable name and unless it is defined, it cannot be executed otherwise it throws out "Uncaught TypeError"
+
+Anonymous function : function where there is no need to define name for the function, it just can be assigned to variable
+
+Named function : Normal function with its name assigned to a variable !!In this case you cannot call function by its name in outer scope!! (Scope Chain)
+
+first class Functions / first class citizens :
+
+used as values
+can be passed as argument
+can be executed inside a closured function
+can be taken as return
+callback function :
+
+A callback function in JavaScript is simply a function that is passed as an argument to another function and is executed later, usually after some task is completed. In simple words: You give a function to another function, and that function will "call it back" when needed.
+
+Function that is passed on as argument to another function is called callback function.
+setTimeout allows JavaScript (which is single-threaded and synchronous) to schedule tasks asynchronously using the event loop and callback queue."
+Event listeners can also invoke closures with scope.
+Event listeners consume a lot of memory which can potentially slow down the website therefore it is good practice to remove if it is not used.
+note: the code of execution is from right to left in js.
+
+Event Loop
+In JavaScript, the event loop, microtask queue, callback queue, and call stack are all key components that help manage the asynchronous nature of the language.
+
+Call Stack:
+
+The call stack is a data structure that keeps track of the function calls in your code. It follows the Last In, First Out (LIFO) principle, meaning the last function that gets pushed onto the stack is the first one to be popped off when the function completes. Callback Queue (Task Queue):
+
+The callback queue, also known as the task queue, holds tasks (callbacks or events) that are ready to be executed. These tasks usually come from asynchronous operations, such as DOM events, HTTP requests, or timers. Event Loop:
+
+The event loop is responsible for continuously checking the call stack and the callback queue. If the call stack is empty, the event loop takes the first task from the callback queue and pushes it onto the call stack for execution.
+
+Microtask Queue: The microtask queue holds tasks that are also ready to be executed but has a higher priority than the callback queue. Microtasks are usually scheduled by JavaScript promises (the callback function which come through promises), mutation observers, and other similar mechanisms and everything else will go to callback queue.
+
+Here's how they work together: When an asynchronous operation is encountered, such as a setTimeout or a Promise, the callback associated with that operation is sent to the callback queue after the specified time or when the Promise settles.
+
+When the call stack is empty (no functions being executed), the event loop takes the first task from the microtask queue and pushes it onto the call stack.
+
+If the microtask queue is empty, the event loop looks at the callback queue and pushes the first task onto the call stack.
+
+This process repeats, allowing JavaScript to handle asynchronous operations without blocking the main thread.
+
+Understanding these concepts is crucial for writing efficient and responsive asynchronous JavaScript code, as it helps you manage the order of execution and prevent blocking the user interface.
+
+Important Points:-
+
+Browser has superpowers that are lent to JS engine to execute some tasks, these superpowers include web API's such as console, location, DOM API, setTimeout, fetch, local storage.
+Callback functions and event handlers are first stored in Web API environment and then transferred to callback queue.
+Promises and mutation observer are stored in API environment and then transferred to microtask queue.
+Event loop continuously observes call stack and when it is empty it transfers task to call stack.
+Micro task is given priority over callback tasks.
+Too many micro tasks generated can cause Starvation (not giving time to callback tasks to execute).
+┌─────────────────────┐ │ Call Stack │ └─────────┬───────────┘ │ ▼ ┌─────────────────────┐ │ Web APIs (timers) │ │ setTimeout (0ms) │ │ setInterval (0ms) │ └─────────┬───────────┘ │ ▼ ┌─────────────────────┐ ┌─────────────────────┐ │ Microtask Queue │ │ Callback Queue │ │ Promise cb │ │ Timeout cb │ └─────────┬───────────┘ │ Interval cb │ │ └─────────┬───────────┘ ▼ │ ┌─────────────────────┐ ▼ │ Event Loop │────────────────────┘ └─────────────────────┘
+
+Start End Promise Timeout Interval Interval Interval ...
+
+JS Engine :-
+
+JS runtime environment contains all elements required to run JS.
+It contains JS engine, set of API's, callback queue, microtask queue, event loop.
+JS engine is a piece of code.
+Process includes Parsing ---> Compilation -----> Execution.
+Parsing breaks code into tokens and converts it into AST(Abstract Syntax Tree).
+Modern JS engine follows JIT compilation, it interprets while it optimizes code as much as it can.
+Execution and Compilation are done together.
+Execution has Garbage collector and other optimization such as inlining, copy elusion, inline caching etc that optimizes the memory space which is used by the JS Engine.
+Basic idea about Mark & Sweep Algo: It comprise of 2 phases -
+
+Mark phase
+Sweep phase
+All objects are marked as 0 initially (at creation) and in mark phase the objects that will be accessible are marked as 1 (reachable) by a DFS graph traversal.
+
+During sweep phase, the objects marked with 0 are removed from heap memory. and also all reachable objects are again initialized with 0 (made unreachable) because the algorithm will run again.
+
+So, it's basically tracing garbage collector concept.
+
+We have JS Runtime Environment so whenever you execute any piece of js code it needs a container which has everything require to run a JS code that was the JS Runtime Environment the browser has a runtime environment , node.js has a js runtime environment and it constitutes of the heart of the JS Runtime Environment which is the JS Engine it also has access to APIs call back queue , event loop and lot of other stuffs it depends on the JS Runtime Environment there could be different things inside different JS Runtime Environment . JS Engine has many phases , ith has three phases :- the code was first went through the parsing phase , the compilation phase and then the execution. And in the parsing phase the tokens are generated and after the tokens, the syntax parser basically parse the whole code and then converts it into a AST (Abstract Syntax Tree) now this AST then is passed on the interpreter , JS is a JIT (just in time) Compilation language (Interpreter + Compiler) so we have a interpreter and compiler , AST is goes to interpreter, interpreter produces the bit code which is then executed with the help of memory heap and call stack, and this compiler is like consistently working upon optimizing the code as much as possible , we have a garbage collector which basically does its job of collecting garbage and optimize the memory space which is used by the JS Engine.
+
+setTimeout :-
+
+The setTimeout function stores it in the callback queue which is executed only after call stack is empty, even if setTimeout is set to 0ms.
+setTimeout ensures that minimum it will take the time mentioned because it may be paused due to call stack not empty.
+High order function
+A higher-order function is a function that does one or both of the following:
+
+Takes one or more functions as arguments.
+Returns a function as its result.
+Breaking Down: "Khana khane ke baad bartan andar rakh" is like a higher-order function. "Bartan andar rakh" is like the callback function.
+
+How It Works: The higher-order function (khana khane ke baad bartan andar rakh) does something (e.g., eating food) and then calls another function when it’s done (bartan andar rakh). The callback function (bartan andar rakh) is the action that gets executed after the main task is completed.
+
+In this analogy: Khana khana (eating food) is the main task. Bartan andar rakh (putting the dishes away) is the additional task that happens after, which is like the callback function being executed after the main function is done.
+
+So, "bartan andar rakh" is acting like a callback function that gets executed after the main action (eating) is completed.
+
+Important points:-
+
+Follow DRY(Don't Repeat Yourself) principle while coding.
+Use function to stop writing repeating line of codes.
+Function that takes another function as argument(callback function) is known as Higher order functions.
+It is this ability that function can be stored, passed and returned, they are called first class citizens.
+If we use Array.property.function-name. This function is accessible to any array in your code.
+--> What is Inheritance of an Object in Javascript? When a new object is trying to access properties and methods of another old object, because this new object might be created from the old objects reference. Example : object1 = { city:'mumbai' }; object2 = Object.create(object1); object2.name = 'Shiv'; console.log(object2.name + 'is from' + object2.city); // here when one couldn't find city property inside object2, it goes to find this property in the inherited object1. This is called inheritance of an object in javascript. This type of inheritance is different from the classical inheritance of oops. This type of inheritance is provided by Prototype Inheritance.
+
+map method is used when we want transformation of whole array.
+filter is used when we want to filter the array to obtain required value.
+reduce is used when we want to reduce the array to single value eg (max, min, avg, sum, difference etc). If you have any array and you need to iterate over that array and come up to a single value out of it use reduce there.
+reduce passes two arguments one function(which includes accumulator and initial value as argument itself) and another initial value of accumulator.
+Promise:
+Promise can be created using a new Promise() constructor function.
+This constructor function takes a callback function as argument.
+The callback function has 2 arguments named 'resolve' and 'reject'. Resolve and reject are the keywords provided by JS.
+We can only resolve or reject a promise. Nothing else can be done.
+An error can also be created using new Error('error message').
+There is also .catch() which is used to attach a failure callback function that handles any error that pops up during the execution of promise chain.
+.catch only handles error of .then() that are present above it. If there is any .then() below it, catch will not handle any error for that, also that ,then will get executed no matter what.
+It can be useful in a way if we want to catch error for a particular portion of a chain.
+We can have multiple catch based on requirement and then a general catch at the end.
+Always remember to return a value in the promise chain for the next .then to use .
+If it returns a value => It will be used as an argument in next function. If it is a promise then the next .then in the promise chain is attached to the promise returned by the current callback function.
+Async and await:
+
+Promise: Think of a promise as a guarantee made by someone (like a function) to do something and provide you with the result later. It's like ordering food at a restaurant. You get a promise (receipt) saying your order will be ready soon. You can wait for it (.then()) or check on it later (.catch()).
+
+Async/Await: Async/await is like asking someone (a function) to do something for you, but instead of waiting for them to finish right there, you tell them you'll do something else while they work. It's like asking a friend to pick up your order from the restaurant. You can go do other things (like order a drink) while your friend (the async function) waits for the food (awaits the promise).
+
+• Promises p1 and p2 start their timers immediately when created (not when you await them). • await pauses the async function until the promise resolves, but doesn't restart the timer. • If you await a longer promise first, the shorter one resolves in the background, but you can’t act on it until the longer one finishes. • If you await the shorter first, you process it sooner, then wait for the remaining time of the longer promise.
+
+• Async/await used for handling promises • Async always return a promise ° Await can only used inside an async function ° Can only write await keyword in front of a promise ° While awaiting JS Engine does not actually wait rather the function is suspended and call stack is free for other stuffs but it looks like program is waiting at that point ° Use try catch for Error handling and can also use . Catch() method
+
+this keyword
+JavaScript's "this" keyword can be confusing for many and behaves differently in various scenarios. The behavior of the "this" keyword depends on the context, such as whether it's in a function, global space, or an arrow function. In the global space, the value of "this" is the global object, which can vary depending on the JavaScript runtime environment (e.g., window in browsers, Global in Node.js). Inside a function, the value of "this" can be undefined in strict mode or the global object in non-strict mode. JavaScript uses a mechanism called "this substitution," where "this" is replaced with the global object when it's undefined or null in non-strict mode. Inside an object's method, "this" refers to the object itself where the method is called. "call," "apply," and "bind" are important functions used to manipulate the value of "this" when calling methods and sharing them between objects. It's essential to understand "call," "apply," and "bind" to effectively control the value of "this" in JavaScript methods. In global space, the 'this' keyword refers to the global object (e.g., 'window' in the browser). In strict mode, 'this' inside a function is undefined; in non-strict mode, it refers to the global object. Understanding "this" substitution: When 'this' is undefined or null inside a function, it becomes the global object. Inside an object's method, 'this' refers to the object itself. The 'call' method can be used to invoke a function with a specific 'this' context. Arrow functions do not have their own 'this' binding and take the value of the enclosing lexical context. In the context of DOM elements, 'this' refers to the specific HTML element being interacted with.
+
+Points to remember:
+
+"this" in global scope always points to the globalObject (globalObject depends on javascript runtime env)
+"this" in a function depends on 2 things a. strict / non strict mode (in strict mode, "this" is undefined, in non strict mode, "this substitution" takes place and "this" points to globalObject) b. how the function is being invoked (if we invoke the function using the global object in strict mode, then "this" will point to that globalObject)
+"this" in a method always points to the object that is used to invoke the method.
+call, apply & bind are used to share a method with another object (hence the "this" keyword reference would also change accordingly)
+"this" inside arrow function refers to the enclosing lexical context
+"this" in DOM points to the HTML element itself on which it is being used.
+LocalStorage and Session Storage: 1)LocalStorage and sessionStorage are the same,but LocalStorage data will be persistent until and unless we decided to clear it while sessionStorage will be lost when we close the web browser. 2) We store data in local storage for user specific data.
+
+async vs defer attribute:
+
+In normal script tag html parsing goes on as soon as the script tag is encountered the script is fetched from the network and there and then they are executed and after that html parsing continues.
+In script tag with async attribute the html parsing is goes on and the script is fetched in async manner parallelly and as soon as the script are available the script is executed after only html parsing continues. in case of defer attribute the html parsing is goes on and the script is fetched in parallel and only executed ones the html parsing is completed
+Note:
+
+The async attribute does not guarantee the order of execution of the scripts but defer does so, suppose if you have multiple scripts which are depended to each other like some scripts are depended on other and some scripts on other you have multiple depended scripts then using a async tag does not guarantee that these scripts will be executed in a particular order that may break your code in that case you should probably prefer defer.
+Another example is suppose you have to load some external scripts (like google analytics, etc) which are quite modular and are independent of our normal code so in that case in make sense to use async attribute and not use the defer otherwise it is mostly wise to use defer attribute because defer attribute maintains the order of execution of the scripts.
+Normal <script> (without async/defer):
+When the browser sees a <script> tag, it pauses HTML parsing, fetches the script, executes it, then resumes HTML parsing.
+This can block rendering and cause slower page load if scripts are large.
+[HTML Parsing Starts] | v [Script Tag Found] | v [Download Script] | v [Execute Script] | v [Resume HTML Parsing]
+
+async Attribute:
+Script is fetched asynchronously in parallel with HTML parsing.
+Execution happens immediately when the script is ready (download completed).
+HTML parsing is paused at that moment until the script finishes execution.
+Does not guarantee order of execution → scripts may run out of order depending on network speed.
+[HTML Parsing Starts] ----------------------> | (continues) | v [Async Script Tag Found] | v [Download Script in Parallel] | v [When Script Ready?] | +----> [Execute Script Immediately] | v (HTML Parsing Paused)
+
+✅ Best for independent scripts (e.g., ads, analytics, tracking pixels, social media widgets). ❌ Not good when scripts depend on each other or on DOM content.
+
+defer Attribute:
+Script is fetched asynchronously in parallel with HTML parsing.
+Execution happens only after HTML parsing is fully complete (i.e., after DOM is built).
+Guarantees execution order (executed in the order they appear in HTML).
+[HTML Parsing Starts] ----------------------> | (continues) | v [Defer Script Tag Found] | v [Download Script in Parallel] | v [HTML Parsing Completes] | v [Execute All Defer Scripts in Order]
+
+✅ Best for dependent scripts or scripts manipulating DOM elements. ✅ Recommended for most normal JS files. ❌ Not ideal for very early critical scripts (they run later).
+
+Short Definition:
+
+async: Scripts are downloaded in parallel with HTML parsing and executed immediately once available. Order is not guaranteed. Best for independent scripts.
+
+defer: Scripts are also downloaded in parallel but executed after HTML parsing completes, and in order. Best for dependent scripts or main logic.
+
+What is HTML Parsing?
+
+Parsing means reading and converting code into a structured format that the computer (browser) understands.
+
+When you open a webpage, the browser downloads the HTML file.
+
+The browser then parses (reads + processes) the HTML line by line to build an internal structure called the DOM (Document Object Model).
+
+Step by Step:
+
+Browser starts reading HTML from top to bottom.
+When it finds tags (, , ,
+,
+etc.), it converts them into nodes.
+
+These nodes are connected like a tree structure = the DOM Tree.
+Once parsing is done, the browser can render (display) the page on the screen.
+Parsing converts this into a DOM tree like: HTML └── BODY ├── H1 ("Hello") └── P ("World")
+
+HTML parsing is the process where the browser reads the HTML document and converts it into a DOM tree (Document Object Model), which represents the structure and content of the webpage. During parsing, scripts can block, run asynchronously, or defer execution depending on their attributes.
