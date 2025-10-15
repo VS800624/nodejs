@@ -1,0 +1,1 @@
+Promise.resolve("Promise").then(console.log)
