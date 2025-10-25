@@ -11,9 +11,57 @@ const app = express()  //We are creating a new express js application
 //     res.send("Haha!")
 // })
 
+// it will match req /user, /user/xyz, /user/1 , /user/...
+// http://localhost:3000/user?userId=101&password=testing  
+// we will get userId=101&password=testing with req.query
 app.get("/user", (req,res) => {
+    console.log(req.query)
     res.send({firstName: "Vishal", lastName: "Singh"})
 })
+
+// http://localhost:3000/user/897
+// we will get userId with req.params and adding /:userId in /user route
+app.get("/user/:userId", (req,res) => {
+    console.log(req.params)
+    res.send({firstName: "Vishal", lastName: "Singh"})
+})
+
+app.get("/user/:userId/:name/:password", (req,res) => {
+    console.log(req.params)
+    res.send({firstName: "Vishal", lastName: "Singh"})
+})
+
+// it will work for /ac as well as /abc due to ? b has become optional
+app.get("/ab?c", (req,res) => {
+    res.send({firstName: "Vishal", lastName: "Singh"})
+})
+
+app.get("/a(bc)?d", (req,res) => {
+    res.send({firstName: "Vishal", lastName: "Singh"})
+})
+
+
+// here you can write as many as b you want to in between a and b this route will still work
+app.get("/ab+c", (req,res) => {
+    res.send({firstName: "Vishal", lastName: "Singh"})
+})
+
+// here this  route will work even if you write anything between ab and cd
+app.get("/ab*cd", (req,res) => {
+    res.send({firstName: "Vishal", lastName: "Singh"})
+})
+
+//this regex means if in the path a exist this route will work
+app.get("/a/", (req,res) => {
+    res.send({firstName: "Vishal", lastName: "Singh"})
+})
+
+//this regex means this route will works as long as the fly is at the end
+app.get("/.*fly$/", (req,res) => {
+    res.send({firstName: "Vishal", lastName: "Singh"})
+})
+
+
 
 app.post("/user", (req,res) => {
 //    saving data to db
