@@ -1,42 +1,33 @@
 const express = require("express");
+const { adminAuth, userAuth } = require("./middlewares/auth");
 
 const app = express();
 
 // app.use("/router", [rH1, rH2, rH3, rH4, rH5])
 // or  app.use("/router", [rH1, rH2], rH3, rH4, rH5)
-// rH means route handle
+// rH means route handler
 
-// Get users => middleware chain  => request handler
-app.use(
-  "/user",
-  (req, res, next) => {
-    // route handler 1
-    // res.send("Handling /route")
-    console.log("Handling /route");
-    next();   // moves to next middleware
-  },
-);
 
-app.get(
-  "/user",
-  (req, res, next) => {
-    // route handler 1
-    // res.send("response 1")
-    console.log("Handling the route user 1!");
-    next();   // moves to next middleware
-  },
-  (req, res, next) => {
-    // route handler 2
-    // res.send("2nd response");
-    console.log("Handling the route user 2!");
-    next()      // moves to next middleware
-  },
-  (req, res,next) => {
-    // route handler 3
-    res.send("3nd response");    // request handler
-    console.log("Handling the route user 3!");
-  }
-);
+// handle auth middleware  for all get, post , , ...  etc requests
+app.use("/admin",adminAuth )
+
+app.post("/user", (req,res) => {
+  res.send("User logged in successfully")
+})
+
+app.get("/user", userAuth , (req,res) => {
+  res.send("User Data Sent")
+})
+
+app.get("/admin/getAllData", (req,res) => {
+  // logic of fetching all data
+  res.send("All data sent")
+})
+
+app.get("/admin/deleteUser", (req,res) => {
+  // login for deleting a user
+  res.send("Deleted a User")
+})
 
 app.listen(3000, () => {
   console.log("Server  is successfully listening on port 3000...");
