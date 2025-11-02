@@ -12,6 +12,11 @@ app.post("/signup", async (req, res) => {
   const user = new User(req.body);
 
   try {
+    const allowed_details = ["firstName", "lastName", "emailId","password"]
+    const isDetailsAllowed = Object.keys(data).every((k) => allowed_details.includes(k))
+    if(!isDetailsAllowed){
+      throw new Error("Cannot add user")
+    }
     await user.save();
     res.send("User added successfully!");
   } catch (err) {
@@ -67,10 +72,18 @@ app.delete("/user", async (req,res) => {
 })
 
 // update data for the user
-app.patch("/user", async(req,res) => {
-  const userId = req.body.userId
+app.patch("/user/:userId", async(req,res) => {
+  const userId = req.params?.userId
   const data = req.body
   try {
+    const allowed_update = ["photoUrl", "skills", "about","gender","age"]
+    const isUpdateAllowed = Object.keys(data).every((k) => allowed_update.includes(k))
+    if(!isUpdateAllowed){
+      throw new Error("Update is not allowed")
+    }
+    if(data?.skills.length > 10){
+      throw new Error("Skills cannot be more than 10")
+    }
     // const user = await User.findByIdAndUpdate({_id: userId}, data, {returnDocument: "after"})
     const user = await User.findByIdAndUpdate(userId , data, {returnDocument: "after", runValidators: true})
     console.log(user)
