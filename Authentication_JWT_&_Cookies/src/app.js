@@ -5,8 +5,11 @@ const User = require("./models/user");
 const {validateSignUpData} = require("./utils/validation")
 const bcrypt = require("bcrypt")
 const validator = require("validator")
+const cookieParser = require("cookie-parser")
+const jwt = require("jsonwebtoken")
 
 app.use(express.json());
+app.use(cookieParser())
 
 app.post("/signup", async (req, res) => {
   // console.log(req.body);
@@ -53,6 +56,14 @@ app.post("/login", async (req,res) => {
 
   const isPasswordValid = await  bcrypt.compare(password, user.password)
   if(isPasswordValid) {
+
+    // Create a JWT Token
+
+    const token = await jwt.sign({_id: user._id}, "DEV@TINDER$619") 
+    console.log(token)
+
+    // Add the token to cookie and send the response back to the user 
+    res.cookie("token", token)
     res.send("Logged in successfully!!!")
   } else{
     throw new Error("Invalid credentials")
@@ -62,6 +73,23 @@ app.post("/login", async (req,res) => {
   }
 })
 
+app.get("/profile", async (req,res) => {
+  const cookies = req.cookies
+  
+  const {token} = cookies
+
+  // validate the token
+   const decodedMessage = await jwt.verify(token, "DEV@TINDER$619")
+  //  console.log(decodedMessage)
+  const {_id} = decodedMessage
+  console.log("Logged in user is:" +_id)
+
+  const user = await User.findById(_id)
+  console.log(user)
+
+
+   res.send(user)
+})
 // get user by email
 app.get("/user", async (req, res) => {
   const userEmail = req.body.emailId;
