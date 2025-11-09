@@ -1,18 +1,12 @@
-const express = require("express");
-const connectDB = require("./config/database");
-const app = express();
-const User = require("./models/user");
-const { validateSignUpData } = require("./utils/validation");
-const bcrypt = require("bcrypt");
+const express = require("express")
+const { validateSignUpData } = require("../utils/validation")
+const bcrypt = require("bcrypt")
 const validator = require("validator");
-const cookieParser = require("cookie-parser");
-const jwt = require("jsonwebtoken");
-const { userAuth } = require("./middlewares/auth");
+const User = require("../models/user");
 
-app.use(express.json());
-app.use(cookieParser());
+const authRouter = express.Router()
 
-app.post("/signup", async (req, res) => {
+authRouter.post("/signup", async (req, res) => {
   // console.log(req.body);
 
   try {
@@ -40,12 +34,12 @@ app.post("/signup", async (req, res) => {
   }
 });
 
-app.post("/login", async (req, res) => {
+authRouter.post("/login", async (req, res) => {
   try {
     const { emailId, password } = req.body;
 
     if (!validator.isEmail(emailId)) {
-      throw new Error("Email is not valid");
+      throw new Error("Invalid credentials");
     }
 
     const user = await User.findOne({ emailId: emailId });
@@ -74,32 +68,5 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.get("/profile", userAuth, async (req, res) => {
-  try {
-    const user = req.user;
-    res.send(user);
-  } catch (err) {
-    res.status(400).send("ERROR:" + err.message);
-  }
-});
 
-app.get("/sendConnectionRequest", userAuth, (req, res) => {
-  const user = req.user;
-
-  // sending a connection request
-  console.log("Sending a connection request");
-  res.send(user.firstName + " sent the connection request!");
-});
-
-connectDB()
-  .then(() => {
-    console.log("Database connection established");
-    app.listen(3000, () => {
-      console.log("Server  is successfully listening on port 3000...");
-    });
-  })
-  .catch((err) => {
-    console.error("Database cannot be connected");
-  });
-
-// Note: Order of writing the routes matter a lot
+module.exports = authRouter
