@@ -25,4 +25,4 @@ connectDB()
     console.error("Database cannot be connected");
   });
 
-// Note: Order of writing the routes matter a lot
+// Note: Order of writing the routes matter a lot`

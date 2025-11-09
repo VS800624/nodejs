@@ -1,10 +1,8 @@
 const express = require("express");
 const { userAuth } = require("../middlewares/auth");
-const authRouter = require("./auth");
-
 const requestRouter = express.Router()
 
-authRouter.get("/sendConnectionRequest", userAuth, (req, res) => {
+requestRouter.get("/sendConnectionRequest", userAuth, (req, res) => {
   const user = req.user;
 
   // sending a connection request
