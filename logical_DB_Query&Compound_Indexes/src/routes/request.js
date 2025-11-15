@@ -9,7 +9,7 @@ requestRouter.post(
   userAuth,
   async(req, res) => {
     try {
-      const fromUserId = req.user._id // the logged in user sending the connection request
+      const fromUserId = req.user._id // the logged in user sending the connection request  
       const toUserId = req.params.toUserId
       const status = req.params.status
 
