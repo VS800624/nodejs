@@ -78,7 +78,7 @@ requestRouter.post(
 
       const connectionRequest = await ConnectionRequest.findOne({
         _id: requestId, 
-        toUserId: loggedInUser,
+        toUserId: loggedInUser._id,
         status: "interested",
       });
 
@@ -88,7 +88,7 @@ requestRouter.post(
 
       connectionRequest.status = status;
 
-      const data = connectionRequest.save(); 
+      const data = await connectionRequest.save(); 
 
       res.json({ message: "Connection request " + status, data});
     } catch (err) {

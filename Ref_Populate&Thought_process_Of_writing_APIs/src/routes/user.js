@@ -23,6 +23,11 @@ userRouter.get("/user/requests/received", userAuth, async (req, res) => {
 });
 
 // Get all the connections of the logged in user
+// This code:
+// Finds all accepted connections related to you
+// Populates both users' profile details
+// Figures out who is the other user in each connection
+// Returns a clean list of your connections
 userRouter.get("/user/connections", userAuth, async(req,res) => {
   try {
 
@@ -34,8 +39,18 @@ userRouter.get("/user/connections", userAuth, async(req,res) => {
         {fromUserId: loggedInUser._id, status: "accepted"}
       ]
     }).populate("fromUserId", USER_SAFE_DATA)
+    .populate("toUserId", USER_SAFE_DATA)
+
+    console.log(connectionRequest)
     
-    const data = connectionRequest.map((row) => row = row.fromUserId)
+    const data = connectionRequest.map((row) => {
+      // Check if the logged-in user is fromUserId
+      if(row.fromUserId._id.toString() === loggedInUser._id.toString()){
+        return row.toUserId      // return the other user
+      }
+      return row.fromUserId     // return the other user
+
+    })
     
     res.json({data})  
     
