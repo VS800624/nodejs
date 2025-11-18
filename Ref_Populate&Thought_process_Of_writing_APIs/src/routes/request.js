@@ -88,7 +88,7 @@ requestRouter.post(
 
       connectionRequest.status = status;
 
-      const data = connectionRequest.save();
+      const data = connectionRequest.save(); 
 
       res.json({ message: "Connection request " + status, data});
     } catch (err) {
