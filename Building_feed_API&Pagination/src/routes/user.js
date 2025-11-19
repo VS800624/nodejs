@@ -1,6 +1,7 @@
 const express = require("express");
 const { userAuth } = require("../middlewares/auth");
 const ConnectionRequest = require("../models/connectionRequest");
+const User = require("../models/user");
 const userRouter = express.Router();
 
 const USER_SAFE_DATA = "firstName lastName photoUrl age gender about skills"
@@ -58,4 +59,44 @@ userRouter.get("/user/connections", userAuth, async(req,res) => {
   }
 })
 
+userRouter.get("/feed", userAuth, async(req,res) => {
+  try {
+    // User should  see all the user cards except:
+    // 1) His own card
+    // 2) His connections
+    // 3) Ignored people 
+    // 4) Already sent the connection request (i.e. interested)
+    const loggedInUser = req.user
+
+    // Find all the connection requests (sent + received)
+    const connectionRequests = await ConnectionRequest.find({
+      $or: [{fromUserId: loggedInUser._id}, {toUserId: loggedInUser._id}]
+    }).select("fromUserId toUserId")
+
+    const hideUserFromFeed = new Set()
+    connectionRequests.forEach((req) => {
+      hideUserFromFeed.add(req.fromUserId.toString())
+      hideUserFromFeed.add(req.toUserId.toString())
+    })
+
+    // console.log(hideUserFromFeed)
+
+    const users = await User.find({
+      $and: [
+        {_id: {$nin: Array.from(hideUserFromFeed)}},
+        {_id: {$ne: loggedInUser._id}}
+      ]
+    }).select(USER_SAFE_DATA)
+    
+    res.send(users)
+    
+  } catch(err) {
+    res.status(400).json({message: err.message})
+  }
+})
+
 module.exports = userRouter;
+
+
+// Select → choose which fields to include/exclude
+// Populate → replace ObjectId with full document
